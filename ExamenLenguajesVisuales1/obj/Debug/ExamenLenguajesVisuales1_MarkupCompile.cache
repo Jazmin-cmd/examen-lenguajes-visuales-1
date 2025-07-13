@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Asus\source\repos\ExamenLenguajesVisuales1\ExamenLenguajesVisuales1\App.xaml
-5-1272488510
+71900506255
 
-182064409664
+251739562265
 581593356469
-MainWindow.xaml;Views\LoginWindow.xaml;Views\RegisterWindow.xaml;Views\VendedorDetalleWindow.xaml;Views\VendedoresWindow.xaml;
+MainWindow.xaml;Views\AddVendedorWindow.xaml;Views\AgregarVentaWindow.xaml;Views\LoginWindow.xaml;Views\RegisterWindow.xaml;Views\VendedorDetalleWindow.xaml;Views\VendedoresWindow.xaml;
 
 False
 

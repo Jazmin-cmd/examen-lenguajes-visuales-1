@@ -10,7 +10,7 @@ namespace ExamenLenguajesVisuales1.Views
         private List<Vendedor> listaVendedores;
 
         public VendedoresWindow()
-        {
+        { 
             InitializeComponent();
             CargarVendedores();
         }
