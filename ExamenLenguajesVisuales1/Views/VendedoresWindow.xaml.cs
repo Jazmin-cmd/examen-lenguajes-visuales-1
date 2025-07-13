@@ -1,5 +1,5 @@
 ﻿using ExamenLenguajesVisuales1.Models;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
@@ -7,11 +7,12 @@ namespace ExamenLenguajesVisuales1.Views
 {
     public partial class VendedoresWindow : Window
     {
-        private List<Vendedor> listaVendedores;
+        private ObservableCollection<Vendedor> listaVendedores = new ObservableCollection<Vendedor>();
 
         public VendedoresWindow()
-        { 
+        {
             InitializeComponent();
+            dgVendedores.ItemsSource = listaVendedores; // Importante: hacer esto solo una vez aquí
             CargarVendedores();
         }
 
@@ -19,30 +20,45 @@ namespace ExamenLenguajesVisuales1.Views
         {
             using (var context = new VendedoreDBContext())
             {
-                listaVendedores = context.Vendedores.ToList();
-                dgVendedores.ItemsSource = listaVendedores;
+                var vendedores = context.Vendedores.ToList();
+
+                listaVendedores.Clear(); // No reemplazamos la colección
+                foreach (var vendedor in vendedores)
+                {
+                    listaVendedores.Add(vendedor);
+                }
             }
         }
 
         private void txtBuscar_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             string filtro = txtBuscar.Text.ToLower();
-            var listaFiltrada = listaVendedores
-                .Where(v => v.Nombre.ToLower().Contains(filtro)
-                         || v.Telefono.ToLower().Contains(filtro)
-                         || v.Email.ToLower().Contains(filtro))
-                .ToList();
-            dgVendedores.ItemsSource = listaFiltrada;
+
+            if (string.IsNullOrWhiteSpace(filtro))
+            {
+                dgVendedores.ItemsSource = listaVendedores;
+            }
+            else
+            {
+                var listaFiltrada = listaVendedores
+                    .Where(v => (v.Nombre != null && v.Nombre.ToLower().Contains(filtro))
+                             || (v.Telefono != null && v.Telefono.ToLower().Contains(filtro))
+                             || (v.Email != null && v.Email.ToLower().Contains(filtro)))
+                    .ToList();
+                dgVendedores.ItemsSource = listaFiltrada;
+            }
         }
 
         private void Agregar_Click(object sender, RoutedEventArgs e)
         {
-            var ventana = new VendedorDetalleWindow();
-            if (ventana.ShowDialog() == true)
+            var ventana = new AddVendedorWindow();
+            bool? resultado = ventana.ShowDialog(); // abre como modal y espera cierre
+            if (resultado == true)
             {
-                CargarVendedores();
+                CargarVendedores(); // recarga la lista para que se vea el nuevo vendedor
             }
         }
+
 
         private void Editar_Click(object sender, RoutedEventArgs e)
         {

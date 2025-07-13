@@ -23,7 +23,16 @@ namespace ExamenLenguajesVisuales1.Views
         public AddVendedorWindow()
         {
             InitializeComponent();
-            this.DataContext = new AddVendedorViewModel();
-        }   
+
+            var vm = new AddVendedorViewModel();
+            vm.VendedorGuardadoConExito += OnVendedorGuardado;
+            DataContext = vm;
+        }
+
+        private void OnVendedorGuardado()
+        {
+            this.DialogResult = true; // Para que ShowDialog() devuelva true
+            this.Close();             // Cierra la ventana
+        }
     }
 }

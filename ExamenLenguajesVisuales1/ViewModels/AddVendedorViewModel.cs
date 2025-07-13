@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -37,6 +38,9 @@ namespace ExamenLenguajesVisuales1.ViewModels
             set { telefono = value; OnPropertyChanged(); }
         }
 
+        // Aquí se declara el evento:
+        public event Action VendedorGuardadoConExito;
+
         public ICommand GuardarCommand { get; }
 
         public AddVendedorViewModel()
@@ -46,7 +50,6 @@ namespace ExamenLenguajesVisuales1.ViewModels
 
         private bool PuedeGuardar()
         {
-            // Validar que los campos mínimos estén llenos.
             return !string.IsNullOrWhiteSpace(Nombre) && !string.IsNullOrWhiteSpace(Apellido);
         }
 
@@ -70,9 +73,11 @@ namespace ExamenLenguajesVisuales1.ViewModels
 
                 MessageBox.Show("Vendedor agregado correctamente.");
 
-                Application.Current.Windows[Application.Current.Windows.Count - 1].Close();
+                // Aquí invocás el evento para avisar que se guardó
+                VendedorGuardadoConExito?.Invoke();
+
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error al guardar vendedor: " + ex.Message);
             }
@@ -85,4 +90,5 @@ namespace ExamenLenguajesVisuales1.ViewModels
         }
     }
 }
+
 
